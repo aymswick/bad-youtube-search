@@ -12,11 +12,14 @@ app.title("Bad Youtube Search")
 app.geometry("600x400")
 app.configure(bg="#8f8f8f")
 
-#Send Button
-sendButton = Button(app, font="Helvetica", text="SEND", width="50", height=5,
-                    bd=0, bg="#BDE096", activebackground="#BDE096", justify="center",
-                    command=onClick)
+#Input Box
+entryBox = Entry(app, font=("Roboto", 24), fg="#5e5e5e", justify="center" )
 
-sendButton.place(x=255, y=360, height=40, width=130)
+#Send Button
+sendButton = Button(app, font="Roboto", text="Search", width="300", height=5,
+                    bd=0, bg="#c0392b", fg="#ffffff", activeforeground="#ffffff" ,activebackground="#e74c3c", justify="center",
+                    command=onClick)
+entryBox.place(x=55, y=100, height=50, width=500)
+sendButton.place(x=155, y=175, height=50, width=300)
 
 app.mainloop()
