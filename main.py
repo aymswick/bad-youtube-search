@@ -19,7 +19,7 @@ def youtube_search(keyword):
   search_response = youtube.search().list(
     q=keyword,
     part="id,snippet",
-    maxResults=25 #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
+    maxResults=50 #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
   ).execute()
 
   videoTitles = []
