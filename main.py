@@ -1,12 +1,15 @@
 #Bad Youtube Search - Python 3
-from Tkinter import *
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from gdata import *
 import sys
+from badgui import *
+from badsort import *
+from YOURAPIKEY import APIKEY
 
-DEVELOPER_KEY = '' # Dynamically updated via input box
+
+DEVELOPER_KEY = APIKEY # Dynamically updated via input box
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
@@ -48,29 +51,3 @@ def youtube_search(keyword):
 
   for video in videoIds:
       print(video)
-
-def onClick():
-    global DEVELOPER_KEY
-    DEVELOPER_KEY = str(apiBox.get())
-    youtube_search(entryBox.get())
-
-
-#Run this on application create
-app = Tk()
-app.title("Bad Youtube Search")
-app.geometry("600x400")
-app.configure(bg="#8f8f8f")
-
-#Input Box
-entryBox = Entry(app, font=("Roboto", 24), fg="#5e5e5e", justify="center" )
-apiBox = Entry(app, font=("Roboto", 12), fg="#5e5e5e", justify="center")
-
-#Send Button
-sendButton = Button(app, font="Roboto", text="Search", width="300", height=5,
-                    bd=0, bg="#c0392b", fg="#ffffff", activeforeground="#ffffff" ,activebackground="#e74c3c", justify="center",
-                    command=onClick)
-entryBox.place(x=55, y=100, height=50, width=500)
-apiBox.place(x=55, y=145, height=20, width=50)
-sendButton.place(x=155, y=175, height=50, width=300)
-
-app.mainloop()
