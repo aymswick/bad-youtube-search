@@ -57,6 +57,9 @@ def youtube_search(keyword):
 
   for video in videoIds:
       print(video)
+      
+  videoList = sorted(videoList, key=attrgetter('dislikeCount'), reverse=True)
+  print(videoList)
 
 def onClick():
     global DEVELOPER_KEY
