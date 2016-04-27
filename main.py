@@ -20,6 +20,13 @@ class Application(Frame):
     def yell(self):
         print("AHHHHHHHHHHHHHHHHH")
 
+class VideoObject:
+    def __init__(self, videoID, dislikeCount):
+        self.videoID = videoID
+        self.dislikeCount = dislikeCount
+    def __rpr__(self):
+        return rpr((self.id, self.dislikeCount))
+
 #Run this on application create
 app = Tk()
 app.title("Bad Youtube Search")
