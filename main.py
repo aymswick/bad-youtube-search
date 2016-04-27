@@ -1,8 +1,9 @@
 #Bad Youtube Search - Python 3
-from tkinter import *
+from Tkinter import *
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
+from gdata import *
 import sys
 
 DEVELOPER_KEY = '' # Dynamically updated via input box
@@ -21,7 +22,8 @@ def youtube_search(keyword):
     maxResults=25 #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
   ).execute()
 
-  videos = []
+  videoTitles = []
+  videoIds = []
   channels = []
   playlists = []
 
@@ -29,7 +31,9 @@ def youtube_search(keyword):
   # matching videos, channels, and playlists.
   for search_result in search_response.get("items", []):
       if search_result["id"]["kind"] == "youtube#video":
-          videos.append("%s (%s)" % (search_result["snippet"]["title"], search_result["id"]["videoId"]))
+          videoTitles.append(search_result["snippet"]["title"])
+          videoIds.append(search_result["id"]["videoId"])
+          #search_result["statistics"]["likeCount"]
 
       elif search_result["id"]["kind"] == "youtube#channel":
           channels.append("%s (%s)" % (search_result["snippet"]["title"], search_result["id"]["channelId"]))
@@ -38,12 +42,16 @@ def youtube_search(keyword):
           playlists.append("%s (%s)" % (search_result["snippet"]["title"],
                                   search_result["id"]["playlistId"]))
 
-  print("Videos:\n", "\n".join(videos), "\n")
-  print("Channels:\n", "\n".join(channels), "\n")
-  print("Playlists:\n", "\n".join(playlists), "\n")
+  #print("Videos:\n", "\n".join(videos), "\n")
+  print "Channels:\n", "\n".join(channels), "\n"
+  print "Playlists:\n", "\n".join(playlists), "\n"
+
+  for video in videoIds:
+      print(video)
 
 def onClick():
-    DEVELOPER_KEY = apiBox.get()
+    global DEVELOPER_KEY
+    DEVELOPER_KEY = str(apiBox.get())
     youtube_search(entryBox.get())
 
 
