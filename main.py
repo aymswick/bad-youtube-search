@@ -10,6 +10,13 @@ DEVELOPER_KEY = '' # Dynamically updated via input box
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
+class VideoObject:
+    def __init__(self, videoID, dislikeCount):
+        self.videoID = videoID
+        self.dislikeCount = dislikeCount
+    def __rpr__(self):
+        return rpr((self.id, self.dislikeCount))
+
 def youtube_search(keyword):
   youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
     developerKey=DEVELOPER_KEY)
@@ -24,6 +31,7 @@ def youtube_search(keyword):
 
   videoTitles = []
   videoIds = []
+  videoList = []
   channels = []
   playlists = []
 
@@ -33,6 +41,7 @@ def youtube_search(keyword):
       if search_result["id"]["kind"] == "youtube#video":
           videoTitles.append(search_result["snippet"]["title"])
           videoIds.append(search_result["id"]["videoId"])
+          videoList.append(VideoObject(search_result["id"]["videoId"], search_result["statistics"]["dislikeCount"])
           #search_result["statistics"]["likeCount"]
 
       elif search_result["id"]["kind"] == "youtube#channel":
