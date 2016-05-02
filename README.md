@@ -1,2 +1,3 @@
 # bad-youtube-search
-## By Anthony, Robert, and Sean
+## See the worst of youtube
+### By Anthony, Robert, and Sean

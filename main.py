@@ -12,6 +12,7 @@ import sys
 DEVELOPER_KEY = APIKEY # Dynamically updated via input box
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
+MAX_RESULTS = 5
 
 class VideoObject:
     def __init__(self, videoID, likeCount, dislikeCount):
@@ -23,17 +24,18 @@ class VideoObject:
 
 def youtube_search(keyword):
   youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
-
+  global MAX_RESULTS
   videoTitles = []
   videoIds = []
   videoList = []
+  get_stats = []
 
 
   #INITIAL SEARCH, GET LIST OF VIDEOS
   search_response = youtube.search().list(
     q=keyword,
     part="id,snippet",
-    maxResults=5 #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
+    maxResults=MAX_RESULTS #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
   ).execute()
 
   # Add each result to the appropriate list, and then display the lists of
@@ -43,21 +45,26 @@ def youtube_search(keyword):
           videoTitles.append(search_result["snippet"]["title"])
           videoIds.append(search_result["id"]["videoId"])
 
-
   #Call the statistics query for each video id returned from previous query
   for ID in videoIds:
-       get_stats = youtube.videos().list(
+       get_stats.append(youtube.videos().list(
        part="id,statistics",
        id= ID
-       ).execute()
+       ).execute())
 
-  for stat_result in get_stats.get("items", []):
-      if stat_result["kind"] == "youtube#video":
-          ID = stat_result["id"]
-          likes = stat_result["statistics"]["likeCount"]
-          dislikes = stat_result["statistics"]["dislikeCount"]
-          vid = VideoObject(ID, likes, dislikes)
-          videoList.append(vid)
+  count = 0
+  for stats in get_stats: #Each list in get_stats has twice the number of items in it due to the part having both id and statistics
+      for stat_result in stats.get("items", []):
+          if stat_result["kind"] == "youtube#video":
+              count += 1 #So, to solve this we manually break out after count of max_results
+              ID = stat_result["id"]
+              likes = stat_result["statistics"]["likeCount"]
+              dislikes = stat_result["statistics"]["dislikeCount"]
+              vid = VideoObject(ID, likes, dislikes)
+              videoList.append(vid)
+              if(count == MAX_RESULTS):
+                  break;
+
 
   #Print stuff
   for video in videoList:
@@ -65,3 +72,4 @@ def youtube_search(keyword):
       print('ID: ' + video.videoID)
       print('Likes: ' + video.likeCount)
       print('Dislikes: ' + video.dislikeCount)
+      print('\n')

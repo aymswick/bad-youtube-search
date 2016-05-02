@@ -4,8 +4,6 @@ from main import *
 def searchButtonClicked():
     youtube_search(entryBox.get())
 
-
-
 #Run this on application create
 app = Tk()
 app.title("Bad Youtube Search")
