@@ -3,32 +3,38 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from gdata import *
-import sys
 from badgui import *
-from badsort import *
+#from badsort import *
 from YOURAPIKEY import APIKEY
+import sys
 
 
 DEVELOPER_KEY = APIKEY # Dynamically updated via input box
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
-def youtube_search(keyword):
-  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    developerKey=DEVELOPER_KEY)
+class VideoObject:
+    def __init__(self, videoID, likeCount, dislikeCount):
+        self.videoID = videoID
+        self.likeCount = likeCount
+        self.dislikeCount = dislikeCount
+    def __rpr__(self):
+        return rpr((self.id, self.dislikeCount))
 
-  # Call the search.list method to retrieve results matching the specified
-  # query term.
-  search_response = youtube.search().list(
-    q=keyword,
-    part="id,snippet",
-    maxResults=50 #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
-  ).execute()
+def youtube_search(keyword):
+  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
   videoTitles = []
   videoIds = []
-  channels = []
-  playlists = []
+  videoList = []
+
+
+  #INITIAL SEARCH, GET LIST OF VIDEOS
+  search_response = youtube.search().list(
+    q=keyword,
+    part="id,snippet",
+    maxResults=5 #THIS NUMBER DETERMINES HOW MANY VIDEOS ARE RETURNED
+  ).execute()
 
   # Add each result to the appropriate list, and then display the lists of
   # matching videos, channels, and playlists.
@@ -36,18 +42,26 @@ def youtube_search(keyword):
       if search_result["id"]["kind"] == "youtube#video":
           videoTitles.append(search_result["snippet"]["title"])
           videoIds.append(search_result["id"]["videoId"])
-          #search_result["statistics"]["likeCount"]
 
-      elif search_result["id"]["kind"] == "youtube#channel":
-          channels.append("%s (%s)" % (search_result["snippet"]["title"], search_result["id"]["channelId"]))
 
-      elif search_result["id"]["kind"] == "youtube#playlist":
-          playlists.append("%s (%s)" % (search_result["snippet"]["title"],
-                                  search_result["id"]["playlistId"]))
+  #Call the statistics query for each video id returned from previous query
+  for ID in videoIds:
+       get_stats = youtube.videos().list(
+       part="id,statistics",
+       id= ID
+       ).execute()
 
-  #print("Videos:\n", "\n".join(videos), "\n")
-  print "Channels:\n", "\n".join(channels), "\n"
-  print "Playlists:\n", "\n".join(playlists), "\n"
+  for stat_result in get_stats.get("items", []):
+      if stat_result["kind"] == "youtube#video":
+          ID = stat_result["id"]
+          likes = stat_result["statistics"]["likeCount"]
+          dislikes = stat_result["statistics"]["dislikeCount"]
+          vid = VideoObject(ID, likes, dislikes)
+          videoList.append(vid)
 
-  for video in videoIds:
-      print(video)
+  #Print stuff
+  for video in videoList:
+      #print('Title: ' + video.videoTitle)
+      print('ID: ' + video.videoID)
+      print('Likes: ' + video.likeCount)
+      print('Dislikes: ' + video.dislikeCount)
