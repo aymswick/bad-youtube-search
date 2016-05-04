@@ -7,20 +7,30 @@ from badgui import *
 #from badsort import *
 from YOURAPIKEY import APIKEY
 import sys
+import youtube_dl
 
 
 DEVELOPER_KEY = APIKEY # Dynamically updated via input box
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
-MAX_RESULTS = 5
+MAX_RESULTS = 50
 
 class VideoObject:
-    def __init__(self, videoID, likeCount, dislikeCount):
+    videoID = ""
+    dislikeCount = 0
+
+    def __init__(self, videoID, dislikeCount):
         self.videoID = videoID
-        self.likeCount = likeCount
         self.dislikeCount = dislikeCount
     def __rpr__(self):
         return rpr((self.id, self.dislikeCount))
+
+def downloadWorst(worstVids):
+    #Need to save videos as 1,2,3,4,5 in /temp/ folder
+    #Need to for loop through all vids in list
+    ydl_opts = {'format': 'mp4'}
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download(['http://www.youtube.com/watch?v=' + worstVids[0].videoID])
 
 def youtube_search(keyword):
   youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
@@ -29,7 +39,7 @@ def youtube_search(keyword):
   videoIds = []
   videoList = []
   get_stats = []
-
+  dislikes = []
 
   #INITIAL SEARCH, GET LIST OF VIDEOS
   search_response = youtube.search().list(
@@ -46,6 +56,7 @@ def youtube_search(keyword):
           videoIds.append(search_result["id"]["videoId"])
 
   #Call the statistics query for each video id returned from previous query
+  #Change algorithm to dislikecount / viewcount
   for ID in videoIds:
        get_stats.append(youtube.videos().list(
        part="id,statistics",
@@ -58,18 +69,25 @@ def youtube_search(keyword):
           if stat_result["kind"] == "youtube#video":
               count += 1 #So, to solve this we manually break out after count of max_results
               ID = stat_result["id"]
-              likes = stat_result["statistics"]["likeCount"]
-              dislikes = stat_result["statistics"]["dislikeCount"]
-              vid = VideoObject(ID, likes, dislikes)
-              videoList.append(vid)
+              try:
+                  dislikes = int(stat_result["statistics"]["dislikeCount"])
+                  vid = VideoObject(ID, dislikes)
+                  videoList.append(vid)
+                  break
+
+              except:
+                  count -= 1
               if(count == MAX_RESULTS):
                   break;
 
 
   #Print stuff
+  videoList = sorted(videoList, key=lambda video: video.dislikeCount, reverse=True)
+
   for video in videoList:
       #print('Title: ' + video.videoTitle)
-      print('ID: ' + video.videoID)
-      print('Likes: ' + video.likeCount)
-      print('Dislikes: ' + video.dislikeCount)
+      print('ID: ' + str(video.videoID))
+      print('Dislikes: ' + str(video.dislikeCount))
       print('\n')
+
+  downloadWorst(videoList[:5])
