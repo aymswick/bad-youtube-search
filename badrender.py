@@ -23,7 +23,7 @@ comp_clips =  [c.resize(r.size)
                for c,r in zip(clips,regions)]
 
 cc = CompositeVideoClip(comp_clips,im.size)
-cc.resize(0.6).write_videofile("../../composition.mp4")
+cc.resize(0.6).write_videofile("./temp/composition.mp4")
 
 # Note that this particular composition takes quite a long time of
 # rendering (about 20s on my computer for just 4s of video).
