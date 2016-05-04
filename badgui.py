@@ -18,7 +18,7 @@ entryBox.focus()
 #Send Button
 sendButton = Button(app, font="Roboto", text="Search", width="300", height=5,
                     bd=0, bg="#c0392b", fg="#ffffff", activeforeground="#ffffff" ,activebackground="#e74c3c", justify="center",
-                    command=searchButtonClicked)
+                    command= lambda: searchButtonClicked(1))
 entryBox.place(x=55, y=100, height=50, width=500)
 
 sendButton.place(x=155, y=175, height=50, width=300)
