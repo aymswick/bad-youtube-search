@@ -2,21 +2,19 @@ from moviepy.editor import *
 from moviepy.video.tools.segmenting import findObjects
 
 # Load the image specifying the regions.
-im = ImageClip("../../ultracompositing/motif.png")
+im = ImageClip("./mosaic_layout.png")
 
 # Loacate the regions, return a list of ImageClips
 regions = findObjects(im)
 
 
-# Load 7 clips from the US National Parks. Public Domain :D
-clips = [VideoFileClip(n, audio=False).subclip(18,22) for n in
-     [ "../../videos/romo_0004.mov",
-      "../../videos/apis-0001.mov",
-      "../../videos/romo_0001.mov",
-      "../../videos/elma_s0003.mov",
-      "../../videos/elma_s0002.mov",
-      "../../videos/calo-0007.mov",
-      "../../videos/grsm_0005.mov"]]
+# Load 5 clips
+clips = [VideoFileClip(n, audio=False).subclip(11,20) for n in
+     [ "./temp/1.mp4",
+      "./temp/2.mp4",
+      "./temp/3.mp4",
+      "./temp/4.mp4",
+      "./temp/5.mp4"]]
 
 # fit each clip into its region
 comp_clips =  [c.resize(r.size)
