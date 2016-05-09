@@ -1,5 +1,14 @@
 from moviepy.editor import *
 from moviepy.video.tools.segmenting import findObjects
+import os, re
+
+
+n = 1
+path = os.getcwd() + '/temp/' #THIS IS IMPORTANTS
+for i in os.listdir('temp'):
+    if i != '.DS_Store':
+        os.rename(path + i, path + str(n) + '.mp4')
+        n += 1
 
 # Load the image specifying the regions.
 im = ImageClip("./mosaic_layout.png")
@@ -9,7 +18,7 @@ regions = findObjects(im)
 
 
 # Load 5 clips
-clips = [VideoFileClip(n, audio=False).subclip(11,20) for n in
+clips = [VideoFileClip(n, audio=False).subclip(11,41) for n in
      [ "./temp/1.mp4",
       "./temp/2.mp4",
       "./temp/3.mp4",

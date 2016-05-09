@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #Bad Youtube Search - Python 3
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -18,19 +20,28 @@ MAX_RESULTS = 50
 class VideoObject:
     videoID = ""
     dislikeCount = 0
+    likeCount = 0
+    viewCount = 0
+    factor = 0.0
 
-    def __init__(self, videoID, dislikeCount):
+    def __init__(self, videoID, dislikeCount, likeCount, viewCount):
         self.videoID = videoID
         self.dislikeCount = dislikeCount
+        self.likeCount = likeCount
+        self.viewCount = viewCount
+        self.factor =  ((dislikeCount / likeCount) * viewCount) * 100
     def __rpr__(self):
         return rpr((self.id, self.dislikeCount))
 
 def downloadWorst(worstVids):
     #Need to save videos as 1,2,3,4,5 in /temp/ folder
     #Need to for loop through all vids in list
-    ydl_opts = {'format': 'mp4'}
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download(['http://www.youtube.com/watch?v=' + worstVids[0].videoID])
+    ydl_opts = {'format': 'mp4', 'outtmpl': 'temp'}
+
+    for vid in worstVids:
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download(['http://www.youtube.com/watch?v=' + vid.videoID])
+
 
 def youtube_search(keyword):
   youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
@@ -71,7 +82,9 @@ def youtube_search(keyword):
               ID = stat_result["id"]
               try:
                   dislikes = int(stat_result["statistics"]["dislikeCount"])
-                  vid = VideoObject(ID, dislikes)
+                  likes = int(stat_result["statistics"]["likeCount"])
+                  views = int(stat_result["statistics"]["viewCount"])
+                  vid = VideoObject(ID, dislikes, likes, views)
                   videoList.append(vid)
                   break
 
@@ -85,9 +98,12 @@ def youtube_search(keyword):
   videoList = sorted(videoList, key=lambda video: video.dislikeCount, reverse=True)
 
   for video in videoList:
-      #print('Title: ' + video.videoTitle)
       print('ID: ' + str(video.videoID))
       print('Dislikes: ' + str(video.dislikeCount))
+      print('Likes: ' + str(video.likeCount))
+      print('Views: ' + str(video.viewCount))
+    # print('Factor: ' + str(video.factor))
       print('\n')
 
   downloadWorst(videoList[:5])
+  os.system('python badrender.py')
