@@ -105,5 +105,7 @@ def youtube_search(keyword):
     # print('Factor: ' + str(video.factor))
       print('\n')
 
+  os.system('rm -r temp/')
   downloadWorst(videoList[:5])
   os.system('python badrender.py')
+  os.system('xdg-open temp/composition.mp4')
