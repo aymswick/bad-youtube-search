@@ -18,7 +18,7 @@ regions = findObjects(im)
 
 
 # Load 5 clips
-clips = [VideoFileClip(n, audio=False).subclip(11,41) for n in
+clips = [VideoFileClip(n, audio=True).subclip(11,41) for n in
      [ "./temp/1.mp4",
       "./temp/2.mp4",
       "./temp/3.mp4",
