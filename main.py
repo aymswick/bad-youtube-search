@@ -36,7 +36,7 @@ class VideoObject:
 def downloadWorst(worstVids):
     #Need to save videos as 1,2,3,4,5 in /temp/ folder
     #Need to for loop through all vids in list
-    ydl_opts = {'format': 'mp4', 'outtmpl': 'temp'}
+    ydl_opts = {'format': 'mp4', 'outtmpl': './temp/%(title)s.%(ext)s'}
 
     for vid in worstVids:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
