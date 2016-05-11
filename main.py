@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 #Bad Youtube Search - Python 3
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -36,7 +36,7 @@ class VideoObject:
 def downloadWorst(worstVids):
     #Need to save videos as 1,2,3,4,5 in /temp/ folder
     #Need to for loop through all vids in list
-    ydl_opts = {'format': 'mp4', 'outtmpl': './temp/%(title)s.%(ext)s'}
+    ydl_opts = {'format': 'worst/mp4', 'outtmpl': './temp/%(title)s.%(ext)s'}
 
     for vid in worstVids:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
