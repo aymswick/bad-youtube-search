@@ -107,5 +107,5 @@ def youtube_search(keyword):
 
   os.system('rm -r temp/')
   downloadWorst(videoList[:5])
-  os.system('python badrender.py')
-  os.system('xdg-open temp/composition.mp4')
+  os.system('python badrender.py -o "./badvideos/'+ str(keyword) +'.mp4"')
+  #os.system('xdg-open "./badvideos/'+str(keyword)+'.mp4"')
