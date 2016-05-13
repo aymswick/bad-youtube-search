@@ -4,7 +4,7 @@ See the worst of YouTube, one 30-second video mosaic at a time.
 
 *Built and tested on Ubuntu & Xubuntu*
 
-###### [GitHub Project Link](https://github.com/aymswick/bad-youtube-search/tree/development)
+###### [GitHub Project Link](https://github.com/aymswick/bad-youtube-search)
 ##### By Anthony, Robert, and Sean
 
 ## Usage
@@ -23,12 +23,12 @@ See the worst of YouTube, one 30-second video mosaic at a time.
  * [moviepy](https://zulko.github.io/moviepy/)
 
  ### Installation
-```bash
-sudo pip install --upgrade google-api-python-client
-sudo pip install youtube-dl
-sudo pip install Pillow==2.9
-sudo pip install moviepy
-```
+ ```bash
+ sudo pip install --upgrade google-api-python-client
+ sudo pip install youtube-dl
+ sudo pip install Pillow==2.9
+ sudo pip install moviepy
+ ```
 
 ## Setup
 Requires a YouTube Data API Key
