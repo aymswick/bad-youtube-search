@@ -42,11 +42,11 @@ Requires a YouTube Data API Key
 
  * `bad-youtube-search`
    * `badvideos/`
-   * `temp/`
-   * `.gitignore`
-   * `badgui.py`
-   * `badlayout.png`
-   * `badrender.py`
-   * `main.py`
-   * `README.md`
-   * `YOURAPIKEY.py`
+    * `temp/`
+    * `.gitignore`
+    * `badgui.py`
+    * `badlayout.png`
+    * `badrender.py`
+    * `main.py`
+    * `README.md`
+    * `YOURAPIKEY.py`
