@@ -16,11 +16,11 @@ See the worst of YouTube, one 30-second video mosaic at a time.
 
 
 ## Dependencies
- * Python 2.7
- * TKinter
- * youtube-dl
- * Pillow (Version==2.9)
- * moviepy
+ * [Python 2.7](https://www.python.org/)
+ * [TkInter](https://wiki.python.org/moin/TkInter)
+ * [youtube-dl](https://rg3.github.io/youtube-dl/)
+ * [Pillow *Version: 2.9*](https://python-pillow.org/)
+ * [moviepy](https://zulko.github.io/moviepy/)
 
  ### Installation
 ```bash
